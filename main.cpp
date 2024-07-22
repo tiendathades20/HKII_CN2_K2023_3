@@ -96,6 +96,9 @@ class CDonThuc
                 return temp;
             }
        }
+       
+        int getHeSo() const { return heso; }
+        int getSoMu() const { return somu; }
 
 };
 
@@ -128,7 +131,49 @@ class CDaThuc
                     os << " + ";
                 }
             }
+            cout << endl;
             return os;
+        }
+        
+        CDaThuc operator+(const CDaThuc &dt)
+    {
+        CDaThuc result = *this;
+        for (const auto &donThuc : dt.donthucs)
+        {
+            bool found = false;
+            for (auto &resDonThuc : result.donthucs)
+            {
+                if (resDonThuc.getSoMu() == donThuc.getSoMu())
+                {
+                    resDonThuc = resDonThuc + donThuc;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                result.donthucs.push_back(donThuc);
+            }
+        }
+        return result;
+    }
+             CDaThuc operator-(const CDaThuc& b) const
+        {
+            CDaThuc result = *this;
+            for (const auto& x : b.donthucs) {
+                bool found = false;
+                for (auto& y : result.donthucs) {
+                    if (y.getSoMu() == x.getSoMu()) {
+                        y = y - x;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    result.donthucs.push_back(CDonThuc(-x.getHeSo(), x.getSoMu()));
+                }
+            }
+            return result;
         }
 
 };
@@ -141,5 +186,11 @@ int main()
     cin >> dt1;
     cout << "Nhap da thuc thu hai:\n";
     cin >> dt2;
-    cout << dt1;
+    cout << dt1 << dt2;
+    CDaThuc kq;
+    kq = dt1 + dt2;
+    cout << kq;
+    CDaThuc kq1;
+    kq1 = dt1 - dt2;
+    cout << kq1;
 }
